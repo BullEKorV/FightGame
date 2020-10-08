@@ -6,6 +6,7 @@ namespace Fight
     class Program
     {
         static Random rnd = new Random();
+        static int round;
         static int p1Health;
         static int p2Health;
         static bool endApp = false;
@@ -15,25 +16,36 @@ namespace Fight
         {
             while (!endApp)
             {
+                //reset game data
+                round = 1;
                 p1Health = 50;
                 p2Health = 50;
+                gameActive = true;
+
+                Console.WriteLine("Welcome to fight. Press any key to continue");
+                Console.ReadKey();
+
                 while (gameActive)
                 {
+                    Console.WriteLine($"Round {round}!");
                     //player 1
                     int damage = attack();
                     p1Health -= damage;
-                    Console.WriteLine($"Player 1 lost {damage} health");
-                    Console.WriteLine($"Player 1 health: {p1Health}");
+                    Console.WriteLine($"Player 2 hit Player 1 for {damage} damage\n");
+                    Console.WriteLine($"Player 1 health remaining: {p1Health}\n");
                     checkLose();
+                    if (gameActive == false) break;
                     Console.ReadKey();
 
                     //player 2
                     damage = attack();
                     p2Health -= damage;
-                    Console.WriteLine($"Player 2 lost {damage} health");
-                    Console.WriteLine($"Player 2 health: {p2Health}");
+                    Console.WriteLine($"Player 1 hit Player 2 for {damage} damage\n");
+                    Console.WriteLine($"Player 2 health remaining: {p2Health}\n");
                     checkLose();
+                    if (gameActive == false) break;
                     Console.ReadKey();
+                    round++;
                 }
             }
         }
@@ -60,12 +72,13 @@ namespace Fight
                 else if (checkHealth(p2Health)) Console.WriteLine("Player 2 lost");
                 Console.WriteLine("Do you want to play again? Y/N?");
                 string response = Console.ReadLine().ToLower();
-                while (!(response == "y" && response == "n"))
+                while (!(response == "y" || response == "n"))
                 {
                     Console.WriteLine("Please enter Y/N");
                     response = Console.ReadLine().ToLower();
                 }
                 if (response == "n") endApp = true;
+                gameActive = false;
             }
         }
     }
